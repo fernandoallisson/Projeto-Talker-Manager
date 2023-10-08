@@ -1,4 +1,4 @@
-const routerTalk = require('express').Router();
+const routerTalker = require('express').Router();
 const path = require('path');
 const fs = require('fs');
 const talker = require('../talker.json');
@@ -6,7 +6,7 @@ const talker = require('../talker.json');
 const TALKER_PATH_ARCH = path.join(__dirname, '../talker.json');
 const HTTP_OK_STATUS = 200;
 
-routerTalk.get('/talk', (req, res) => {
+routerTalker.get('/talker', (req, res) => {
   fs.readFile(TALKER_PATH_ARCH, (error, data) => {
     if (error) {
       return res.status(500).json({ message: error.message });
@@ -15,7 +15,7 @@ routerTalk.get('/talk', (req, res) => {
   });
 });
 
-routerTalk.get('/talk/:id', (req, res) => {
+routerTalker.get('/talker/:id', (req, res) => {
   const { id } = req.params;
   const talkerById = talker.find((talkers) => talkers.id === Number(id));
   if (!talkerById) {
@@ -24,4 +24,16 @@ routerTalk.get('/talk/:id', (req, res) => {
   res.status(HTTP_OK_STATUS).json(talkerById);
 });
 
-module.exports = routerTalk;
+routerTalker.post('/talker', (req, res) => {
+  const { name, age, talk } = req.body;
+  const newTalker = { name, age, talk, id: talker.length + 1 };
+  talker.push(newTalker);
+  fs.writeFile(TALKER_PATH_ARCH, JSON.stringify(talker), (error) => {
+    if (error) {
+      return res.status(500).json({ message: error.message });
+    }
+    return res.status(201).json(newTalker);
+  });
+});
+
+module.exports = routerTalker;
