@@ -12,13 +12,16 @@ app.get('/', (_request, response) => {
 });
 // ----------------------------
 
-// Endpoint para obter todos os talkers
+// Endpoint para obter todos os talkers;
 
 app.get('/talker', (req, res) => {
-  res.status(HTTP_OK_STATUS).json(talker);
+  if (talker) {
+    return res.status(HTTP_OK_STATUS).json(talker);
+  }
+  return res.status(200).json([]);
 });
 
-// Endpoint para obter um talker específico
+// Endpoint para obter um talker específico pelo id;
 
 app.get('/talker/:id', (req, res) => {
   const { id } = req.params;
