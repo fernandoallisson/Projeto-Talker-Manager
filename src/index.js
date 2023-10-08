@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 
 const talker = require('./talker.json');
+const generateToken = require('./utils/createToken');
 
 const app = express();
 app.use(express.json());
@@ -39,7 +40,7 @@ app.post('/login', (req, res) => { // Endpoint para fazer login. Devolve um toke
   if (email === '' || password === '') {
     return res.status(401).json({ message: 'Precisa ter alguma coisa no e-mail e senha' });
   }
-  const token = Math.random().toString(16).substr(2);
+  const token = generateToken(16);
   res.status(HTTP_OK_STATUS).json({ token });
 });
 
