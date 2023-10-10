@@ -24,16 +24,4 @@ routerTalker.get('/talker/:id', (req, res) => {
   res.status(HTTP_OK_STATUS).json(talkerById);
 });
 
-routerTalker.post('/talker', (req, res) => {
-  const { name, age, talk } = req.body;
-  const newTalker = { name, age, talk, id: talker.length + 1 };
-  talker.push(newTalker);
-  fs.writeFile(TALKER_PATH_ARCH, JSON.stringify(talker), (error) => {
-    if (error) {
-      return res.status(500).json({ message: error.message });
-    }
-    return res.status(201).json(newTalker);
-  });
-});
-
 module.exports = routerTalker;
