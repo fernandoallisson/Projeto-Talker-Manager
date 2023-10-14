@@ -2,6 +2,13 @@ const routerTalker = require('express').Router();
 const path = require('path');
 const fs = require('fs');
 const talker = require('../talker.json');
+const {
+  validateTalkerAge,
+  validateTalkerName,
+  validateTalkerTalk,
+  validateTalkerWatchedAt,
+  validateTalkerRate,
+} = require('../utils/validateTalkers');
 
 const TALKER_PATH_ARCH = path.join(__dirname, '../talker.json');
 const HTTP_OK_STATUS = 200;
@@ -23,5 +30,32 @@ routerTalker.get('/talker/:id', (req, res) => {
   }
   res.status(HTTP_OK_STATUS).json(talkerById);
 });
+
+routerTalker.post(
+  '/talker',
+  validateTalkerName,
+  validateTalkerAge,
+  validateTalkerTalk,
+  validateTalkerWatchedAt,
+  validateTalkerRate, (req, res) => {
+    const { name, age, talk: { rate, watchedAt } } = req.body;
+    const newTalker = {
+      name,
+      age: Number(age),
+      id: talker.length + 1,
+      talk: { 
+        rate,
+        watchedAt,
+      },
+    };
+    talker.push(newTalker);
+    fs.writeFile(TALKER_PATH_ARCH, JSON.stringify(talker), (error) => {
+      if (error) {
+        return res.status(500).json({ message: error.message });
+      }
+      return res.status(201).json(newTalker);
+    });
+  },
+);
 
 module.exports = routerTalker;
