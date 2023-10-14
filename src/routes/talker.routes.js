@@ -2,14 +2,14 @@ const routerTalker = require('express').Router();
 const path = require('path');
 const fs = require('fs');
 const talker = require('../talker.json');
-const validateToken = require('../utils/validateToken');
+const validateToken = require('../middlewares/validateToken');
 const {
   validateTalkerAge,
   validateTalkerName,
   validateTalkerTalk,
   validateTalkerWatchedAt,
   validateTalkerRate,
-} = require('../utils/validateTalkers');
+} = require('../middlewares/validateTalkers');
 
 const TALKER_PATH_ARCH = path.join(__dirname, '../talker.json');
 const HTTP_OK_STATUS = 200;

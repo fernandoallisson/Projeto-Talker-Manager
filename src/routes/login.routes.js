@@ -1,6 +1,6 @@
 const loginRouter = require('express').Router();
-const generateToken = require('../utils/createToken');
-const validateEmail = require('../utils/validateEmail');
+const generateToken = require('../middlewares/createToken');
+const validateEmail = require('../middlewares/validateEmail');
 
 const HTTP_OK_STATUS = 200;
 
