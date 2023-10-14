@@ -2,6 +2,7 @@ const routerTalker = require('express').Router();
 const path = require('path');
 const fs = require('fs');
 const talker = require('../talker.json');
+const validateToken = require('../utils/validateToken');
 const {
   validateTalkerAge,
   validateTalkerName,
@@ -33,6 +34,7 @@ routerTalker.get('/talker/:id', (req, res) => {
 
 routerTalker.post(
   '/talker',
+  validateToken,
   validateTalkerName,
   validateTalkerAge,
   validateTalkerTalk,

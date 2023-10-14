@@ -1,4 +1,4 @@
-function ValidateToken(req, res, next) {
+function validateToken(req, res, next) {
   const token = req.headers.authorization;
 
   if (!token) {
@@ -12,4 +12,4 @@ function ValidateToken(req, res, next) {
   next();
 }
 
-module.exports = ValidateToken;
+module.exports = validateToken;
