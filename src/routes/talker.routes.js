@@ -1,7 +1,10 @@
 const routerTalker = require('express').Router();
+
 const path = require('path');
 const fs = require('fs');
+
 const talker = require('../talker.json');
+
 const validateToken = require('../middlewares/validateToken');
 const {
   validateTalkerAge,

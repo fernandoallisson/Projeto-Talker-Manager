@@ -15,9 +15,11 @@ function validateTalkerAge(req, res, next) {
     return res.status(400).json({ message: 'O campo "age" é obrigatório' });
   }
 
-  const ageNumber = parseInt(age, Number);
+  const ageNumber = Number(age);
+  const numberIsInteger = Number.isInteger(ageNumber);
+  const numberIsLessThanEighteen = Number(ageNumber) < 18;
 
-  if (Number.isNaN(ageNumber) || ageNumber < 18) {
+  if (!numberIsInteger || numberIsLessThanEighteen) {
     return res.status(400).json(
       { message: 'O campo "age" deve ser um número inteiro igual ou maior que 18' },
     );
@@ -50,14 +52,20 @@ function validateTalkerWatchedAt(req, res, next) {
 
 function validateTalkerRate(req, res, next) {
   const { talk: { rate } } = req.body;
-  if (!rate) {
-    return res.status(400).json({ message: 'O campo "rate" é obrigatório' });
-  }
-  const rateNumber = parseInt(rate, Number);
+  const rateNumber = Number(rate);
 
-  if (Number.isNaN(rateNumber) || Number(rateNumber) < 1 || Number(rateNumber) > 5) {
-    return res.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
+  if (Number.isNaN(rateNumber)) {
+    return res.status(400).json(
+      { message: 'O campo "rate" é obrigatório' },
+    );
   }
+
+  if (!Number.isInteger(rateNumber) || rateNumber < 1 || rateNumber > 5) {
+    return res.status(400).json(
+      { message: 'O campo "rate" deve ser um número inteiro entre 1 e 5' },
+    );
+  }
+
   next();
 }
 
