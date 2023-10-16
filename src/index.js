@@ -2,7 +2,7 @@ const express = require('express');
 const routerTalker = require('./routes/talker.routes');
 const routerLogin = require('./routes/login.routes');
 
-const PORT = process.env.PORT || 3003;
+const PORT = process.env.PORT || 3001;
 const HTTP_OK_STATUS = 200;
 
 const app = express();
