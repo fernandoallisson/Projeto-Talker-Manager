@@ -63,4 +63,45 @@ routerTalker.post(
   },
 );
 
+routerTalker.put(
+  '/talker/:id',
+  validateToken,
+  validateTalkerName,
+  validateTalkerAge,
+  validateTalkerTalk,
+  validateTalkerWatchedAt,
+  validateTalkerRate, (req, res) => {
+    const { id } = req.params;
+    const { name, age, talk: { rate, watchedAt } } = req.body;
+    const talkerById = talker.find((talkers) => talkers.id === Number(id));
+    if (!talkerById) {
+      return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+    }
+    const newTalker = {
+      name, age: Number(age), id: talkerById.id, talk: { rate, watchedAt },
+    };
+    talker.splice((talker.indexOf(talkerById)), 1, newTalker);
+    fs.writeFile(TALKER_PATH_ARCH, JSON.stringify(talker), (error) => {
+      if (error) {
+        return res.status(500).json({ message: error.message });
+      }
+      return res.status(200).json(newTalker);
+    });
+  },
+);
+
+routerTalker.delete('/talker/:id', validateToken, (req, res) => {
+  const { id } = req.params;
+  const talkerById = talker.find((talkers) => talkers.id === Number(id));
+  if (!talkerById) {
+    return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+  }
+  talker.splice((talker.indexOf(talkerById)), 1);
+  fs.writeFile(TALKER_PATH_ARCH, JSON.stringify(talker), (error) => {
+    if (error) {
+      return res.status(500).json({ message: error.message });
+    }
+    return res.status(204).json({ message: 'Pessoa palestrante deletada com sucesso' });
+  });
+});
 module.exports = routerTalker;
